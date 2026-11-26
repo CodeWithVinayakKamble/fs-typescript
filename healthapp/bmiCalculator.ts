@@ -1,3 +1,24 @@
+import { isNotNumber } from "./utils.ts";
+
+interface BmiValues {
+  heightInCm: number;
+  weightInKg: number;
+}
+
+const parseArguments = (args: string[]): BmiValues => {
+  if (args.length < 4) throw new Error("Not enough arguments");
+  if (args.length > 4) throw new Error("Too many arguments");
+
+  if (!isNotNumber(args[2]) && !isNotNumber(args[3])) {
+    return {
+      heightInCm: Number(args[2]),
+      weightInKg: Number(args[3]),
+    };
+  } else {
+    throw new Error("Provided values were not numbers!");
+  }
+};
+
 const calculateBmi = (heightInCm: number, weightInKg: number): string => {
   if (heightInCm <= 0) throw new Error("Height must be greater than zero");
   if (weightInKg <= 0) throw new Error("Weight must be greater than zero");
@@ -10,7 +31,8 @@ const calculateBmi = (heightInCm: number, weightInKg: number): string => {
 };
 
 try {
-  console.log(calculateBmi(180, 74));
+  const { heightInCm, weightInKg } = parseArguments(process.argv);
+  console.log(calculateBmi(heightInCm, weightInKg));
 } catch (error: unknown) {
   let errorMessage = "Something went wrong : ";
   if (error instanceof Error) {
