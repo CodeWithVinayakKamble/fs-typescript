@@ -19,7 +19,10 @@ const parseArguments = (args: string[]): BmiValues => {
   }
 };
 
-const calculateBmi = (heightInCm: number, weightInKg: number): string => {
+export const calculateBmi = (
+  heightInCm: number,
+  weightInKg: number,
+): string => {
   if (heightInCm <= 0) throw new Error("Height must be greater than zero");
   if (weightInKg <= 0) throw new Error("Weight must be greater than zero");
   const heightInMeter = heightInCm / 100;
@@ -30,13 +33,15 @@ const calculateBmi = (heightInCm: number, weightInKg: number): string => {
   return "Obese";
 };
 
-try {
-  const { heightInCm, weightInKg } = parseArguments(process.argv);
-  console.log(calculateBmi(heightInCm, weightInKg));
-} catch (error: unknown) {
-  let errorMessage = "Something went wrong : ";
-  if (error instanceof Error) {
-    errorMessage += error.message;
+if (process.argv[1] === import.meta.filename) {
+  try {
+    const { heightInCm, weightInKg } = parseArguments(process.argv);
+    console.log(calculateBmi(heightInCm, weightInKg));
+  } catch (error: unknown) {
+    let errorMessage = "Something went wrong : ";
+    if (error instanceof Error) {
+      errorMessage += error.message;
+    }
+    console.log(errorMessage);
   }
-  console.log(errorMessage);
 }
