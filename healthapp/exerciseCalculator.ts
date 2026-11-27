@@ -25,7 +25,10 @@ interface Result {
   average: number;
 }
 
-const calculateExercises = (dailyHrs: number[], target: number): Result => {
+export const calculateExercises = (
+  dailyHrs: number[],
+  target: number,
+): Result => {
   if (dailyHrs.length <= 0) throw new Error("empty hours cannot be accepted");
   if (target <= 0) throw new Error("Target hours must greater than 0");
   if (dailyHrs.some((h) => h < 0))
@@ -53,7 +56,7 @@ const calculateExercises = (dailyHrs: number[], target: number): Result => {
       };
     return {
       rating: 1,
-      ratingDescription: "you need to push harder next week",
+      ratingDescription: "bad",
     };
   };
 
@@ -70,13 +73,15 @@ const calculateExercises = (dailyHrs: number[], target: number): Result => {
   };
 };
 
-try {
-  const { target, dailyHrs } = parseArguments(process.argv);
-  console.log(calculateExercises(dailyHrs, target));
-} catch (error: unknown) {
-  let errorMessage = "Something went wrong : ";
-  if (error instanceof Error) {
-    errorMessage += error.message;
+if (process.argv[1] === import.meta.filename) {
+  try {
+    const { target, dailyHrs } = parseArguments(process.argv);
+    console.log(calculateExercises(dailyHrs, target));
+  } catch (error: unknown) {
+    let errorMessage = "Something went wrong : ";
+    if (error instanceof Error) {
+      errorMessage += error.message;
+    }
+    console.log(errorMessage);
   }
-  console.log(errorMessage);
 }
